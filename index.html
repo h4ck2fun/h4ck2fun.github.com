@@ -237,7 +237,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="h4ck2fun">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/source/img/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -329,7 +329,7 @@ XXX: XXXX
 <li>没有对商品的数量进行校验是否正常导致结算出问题，例如A商品单价10元，B商品单价9元。</li>
 <li>系统进行结算的公式： 单价数量 + 单价数量 = 总价</li>
 <li>假如我添加了1个A、-1个B到购物车，</li>
-<li>总价 = 110 + （-1）9 = 10 – 9 = 1 元。</li>
+<li>总价 = 1 <em> 10 + （-1） </em> 9 = 10 – 9 = 1 元。</li>
 </ul>
 
           
@@ -400,6 +400,10 @@ XXX: XXXX
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/source/img/avatar.png"
+                alt="h4ck2fun" />
             
               <p class="site-author-name" itemprop="name">h4ck2fun</p>
               <p class="site-description motion-element" itemprop="description">getshe, getshell</p>
