@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/17/test/">test</a>
+      <a class="article-title" href="/2017/10/17/test/">好孩子不要学 | 我是如何到处混吃混喝的</a>
     </h1>
   
 
@@ -83,15 +83,41 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>aaaaa test ！ hexo</p>
+        <h1 id="好孩子不要学-我是如何到处混吃混喝的"><a href="#好孩子不要学-我是如何到处混吃混喝的" class="headerlink" title="好孩子不要学 | 我是如何到处混吃混喝的"></a>好孩子不要学 | 我是如何到处混吃混喝的</h1><h2 id="不多哔哔-先看图-无图无真相-๑•̀ㅂ•́-و✧。"><a href="#不多哔哔-先看图-无图无真相-๑•̀ㅂ•́-و✧。" class="headerlink" title="不多哔哔 先看图 无图无真相 (๑•̀ㅂ•́)و✧。"></a>不多哔哔 先看图 无图无真相 (๑•̀ㅂ•́)و✧。</h2><p>1.jpg</p>
+<p>###下面就跟大家分享交流一下经验，漏洞均已上报给相应的厂商，无法透露详细细节，见谅。</p>
+<p>###一、某餐饮店的储蓄卡 卡里有800元可到任意分店进行消费</p>
+<ul>
+<li>该储蓄卡分4种面值 60、200（180元购）、400（350元购）、800（650元购）。</li>
+<li>因为没有购物车功能直接进行购买，负数漏洞是无法利用的了。</li>
+<li>那么就分析一下购买的数据包，看看是否进行了价格、优惠等价格的传递。</li>
+<li>关键参数：saleAmt 储蓄卡的单价 totalQty 购买数量 totalAmt 总价。</li>
+<li>尝试修改了单价以及总价无果，程序价格做了检测。</li>
+<li>最后发现修改 cardType 的值，其余参数不动，貌似能以低价购买高价的卡。</li>
+</ul>
+<p><code>选择购买60元的卡 –&gt; 提交订单 –&gt; 拦截数据包修改cardType的值为800的 –&gt; 付款60 –&gt; 拿到800元的卡</code></p>
+<p>####此漏洞产生的原因<br>该程序员还是有安全意识的，对传递的价格参数做了检测。但经过fuzz以及漏洞利用成功之后发现他仅仅将传递的价格与数据库中的价格进行比对，如果存在则放行，不存在则阻止。<br>以60元的举例：传递saleAmt：60 –&gt; 查询数据库中价格列是否含有60？通过并提示付款：阻止。</p>
+<p>###二、某个厂商的活动 参与即可领取XXX电子券<br>开始我还以为只是个活动噱头，没那么容易拿到电子券的。但我控制不住自己的好奇心啊，打开了burpsuite。<br>进入活动进行参与，没想到真的直接跳转到了领取电子券的页面，良心啊!将成功领取电子券的包抓了下来，放到Repeater进行分析，一个get包，大致如下：</p>
+<p><code>GET /?a=0001&amp;b=f
+Host: 127.0.0.1
+XXX: XXXX
+...</code><br>把数据包原封不动的重放，响应200但是没有回显，成功领取的数据包会回显了电子券的过期日期。a参数一看就知道代表是电子券的类型，b参数看不出是什么，但别的地方也没啥好改的，就随便改个值看看吧。<br>没想到一改这b参数的值就回显了电子券的过期日期，我都惊呆了w(ﾟДﾟ)w。打开我的奖励，确认多了一张电子卷，也查看了卷码，跟别的不同。只要b参数的值之前没有提交过，就可以成功领取一张，光数字组合起来的就拿到手软好嘛..</p>
+<p>####此漏洞产生的原因<br>不详..我也不知道为啥会这样，大概是程序的逻辑没有写好，还请大佬多指教。</p>
+<p>###三、想必大家非常熟悉了，基本随处可见的烤鱼店<br>经过一天刻苦的学(shen)习(you)后，大佬们带我去了烤鱼，到了店里我就跟大佬们说。<br>“有没有可能找到漏洞免费吃啊？” 大佬无情回复”怎么可能，哪会有漏洞。”<br>当时手上也没电脑，美滋滋的吃完就溜了。过了两天闲来无事，就去看了看他的自助点餐系统，发现存在负数漏洞 开始还很激动。但是需要到店跟店员确认的，所以并没什么用，但紧接着又发现他的一个商城，有卖一些菜品的卡卷。进入商城页面一个购物车的图标就吸引了我，直接尝试负数漏洞，构造出最低价，付款，最后我仅用4元就买到了一张烤鱼的卷!</p>
+<p>####此漏洞产生的原因</p>
+<ul>
+<li>没有对商品的数量进行校验是否正常导致结算出问题，例如A商品单价10元，B商品单价9元。</li>
+<li>系统进行结算的公式： 单价数量 + 单价数量 = 总价</li>
+<li>假如我添加了1个A、-1个B到购物车，</li>
+<li>总价 = 110 + （-1）9 = 10 – 9 = 1 元。</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/10/17/test/" data-id="cj8uyi2a40000gkns3vraflfv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/10/17/test/" data-id="cj8v00xoy0000kgnse1kdvwst" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test-aaa/">test<aaa></a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/漏洞/">漏洞</a></li></ul>
 
     </footer>
   </div>
@@ -112,7 +138,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/test-aaa/">test<aaa></a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞/">漏洞</a></li></ul>
     </div>
   </div>
 
@@ -122,7 +148,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/test-aaa/" style="font-size: 10px;">test<aaa></a>
+      <a href="/tags/漏洞/" style="font-size: 10px;">漏洞</a>
     </div>
   </div>
 
@@ -144,7 +170,7 @@
       <ul>
         
           <li>
-            <a href="/2017/10/17/test/">test</a>
+            <a href="/2017/10/17/test/">好孩子不要学 | 我是如何到处混吃混喝的</a>
           </li>
         
       </ul>
